@@ -44,5 +44,26 @@ priceLabel.grid(row=2, column=2)
 priceSpinbox = tkinter.Spinbox(frame, from_=0.0, to=1000, increment=0.5)
 priceSpinbox.grid(row=3, column=2)
 
+addItemButton = tkinter.Button(frame, text="Add Item")
+addItemButton.grid(row=4, column=2, pady=5)
+
+columns1 = ('qty', 'desc', 'amount', 'total')
+tree = ttk.Treeview(frame, columns=columns1, show="headings")
+tree.heading('qty', text="Quantity")
+tree.heading('desc', text='Description')
+tree.heading('amount', text='Amount')
+tree.heading('total', text='Total')
+
+tree.grid(row=5, column=0, columnspan=3, padx=20, pady=10)
+
+
+saveInvoiceButton = tkinter.Button(frame, text = 'Generate')
+saveInvoiceButton.grid(row=6, column=0, columnspan='3', sticky='news', padx=20, pady=5)
+
+
+newInvoiceButton = tkinter.Button(frame, text="Clear")
+newInvoiceButton.grid(row=7, column=0, columnspan=3, sticky='news' , padx = 20, pady= 5)
+
+
 
 window.mainloop()
