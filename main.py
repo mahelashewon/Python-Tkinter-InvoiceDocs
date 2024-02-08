@@ -4,14 +4,14 @@ from docxtpl import DocxTemplate
 import datetime
 
 
-def clearItem():
+def clear_item():
     quantitySpinbox.delete(0, tkinter.END)
     quantitySpinbox.insert(0, "1")
     descriptionEntry.delete(0, tkinter.END)
     priceSpinbox.delete(0, tkinter.END)
     priceSpinbox.insert(0, "0.0")
 
-invoiceList = []
+invoice_list = []
 
 def add_item():
     qty = int(quantitySpinbox.get())
@@ -20,33 +20,35 @@ def add_item():
 
     totalprice = qty * price
 
-    invoiceItems = [qty, desc, price, totalprice]
+    invoice_item = [qty, desc, price, totalprice]
 
-    tree.insert('', 0, values=invoiceItems)
-    clearItem()
+    tree.insert('', 0, values=invoice_item)
+    clear_item()
 
-def newInvoice():
+    invoice_list.append(invoice_item)
+
+def new_invoice():
     fNameEntry.delete(0, tkinter.END)
     lNameEntry.delete(0, tkinter.END)
     pNumberEntry.delete(0, tkinter.END)
-    clearItem()
+    clear_item()
     tree.delete(*tree.get_children())
 
-    invoiceList.clear()
+    invoice_list.clear()
 
 
-def generateInvoice():
+def generate_invoice():
     doc = DocxTemplate("invoice.docx")
-    name = fNameEntry.get() + lNameEntry.get()
+    name = fNameEntry.get() +" "+ lNameEntry.get()
     phone = pNumberEntry.get()
-    subtotal = sum(item[3] for item in invoiceList)
+    subtotal = sum(item[3] for item in invoice_list)
     salestax = 0.1
     total = subtotal * (1 - salestax)
 
 
     doc.render({"name" : name,
                 "phone" : phone,
-                "invoice_list" : invoiceList,
+                "invoice_list" : invoice_list,
                 "subtotal": subtotal,
                 "salestax": str(salestax * 100) + "%",
                  "total" : total })
@@ -54,7 +56,7 @@ def generateInvoice():
     doc_name = "newInvoice" + name + datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + ".docx"
     doc.save(doc_name)
 
-    newInvoice()
+    new_invoice()
 
 
 
@@ -110,11 +112,11 @@ tree.heading('total', text='Total')
 tree.grid(row=5, column=0, columnspan=3, padx=20, pady=10)
 
 
-saveInvoiceButton = tkinter.Button(frame, text = 'Generate', command=generateInvoice)
+saveInvoiceButton = tkinter.Button(frame, text = 'Generate', command=generate_invoice)
 saveInvoiceButton.grid(row=6, column=0, columnspan='3', sticky='news', padx=20, pady=5)
 
 
-newInvoiceButton = tkinter.Button(frame, text="Clear", command=newInvoice)
+newInvoiceButton = tkinter.Button(frame, text="Clear", command=new_invoice)
 newInvoiceButton.grid(row=7, column=0, columnspan=3, sticky='news' , padx = 20, pady= 5)
 
 
